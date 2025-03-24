@@ -1,12 +1,28 @@
 Below is an illustrative lab designed to demonstrate **intents processing** using the R libraries `tm`, `nnet`, `caret`, `NLP`, `slam`, and `BH`. 
+
 In this context, "intents processing" refers to classifying text data into predefined categories (intents), a common task in natural language processing (NLP) 
+
 for applications like chatbots or virtual assistants (e.g., identifying whether a user wants to "book a flight" or "check the weather"). 
-This lab will walk you through preprocessing text, building a simple neural network model to classify intents, and evaluating its performance, while leveraging the strengths of each library.
+
+This lab will walk you:
+
+- through preprocessing text, 
+- building a simple neural network model to classify intents, and 
+- evaluating its performance, 
+
+while leveraging the strengths of each library.
 
 ### Lab: Intents Processing in R Using `tm`, `nnet`, `caret`, `NLP`, `slam`, and `BH`
 
 #### Objective
-Build a simple intent classification system in R to categorize user inputs (e.g., sentences) into intents like "greeting," "question," or "request." This lab illustrates how the listed libraries work together to process text, train a model, and optimize performance.
+Build a simple intent classification system in R to categorize user inputs 
+
+(e.g., sentences) into intents like "greeting," "question," or "request." 
+
+This lab illustrates how the listed libraries work together to 
+process text, 
+train a model, and 
+optimize performance.
 
 #### Prerequisites
 - R installed on your system.
@@ -61,11 +77,11 @@ print(as.matrix(dtm))  # View the matrix
 
 **What’s Happening?**
 - `NLP` splits text into tokens, introducing you to text segmentation.
-- `tm` preprocesses the text (e.g., removing "the," "me") and converts it into a numerical matrix where rows are sentences and columns are unique words. This is the vectorization step critical for AI models.
+- `tm` preprocesses the text (e.g., removing "the," "me") and converts it into a numerical matrix where rows are sentences and columns are unique words. 
+This is the vectorization step critical for AI models.
 
 #### Step 4: Optimize with `slam`
 Convert the `tm` matrix to a sparse format using `slam` for efficiency.
-```R
 library(slam)
 sparse_dtm <- as.simple_triplet_matrix(dtm)
 print(sparse_dtm)
@@ -94,7 +110,7 @@ summary(model)  # View weights and structure
 **What’s Happening?**
 - `nnet` trains a feedforward neural network with 2 hidden nodes. The model learns weights to map word frequencies to intents, illustrating optimization (gradient descent) and non-linear transformations (sigmoid activation).
 
-#### Step 7: Evaluate with `caret`
+resume here:  #### Step 7: Evaluate with `caret`
 Use `caret` to perform cross-validation and assess model performance.
 ```R
 library(caret)

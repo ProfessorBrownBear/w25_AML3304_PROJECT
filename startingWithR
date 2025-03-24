@@ -1,0 +1,128 @@
+The R programming language provides a playground to experiment and work with the Math Concepts of the AI MODEL:
+
+Start by getting this R code to run: 
+
+R lab to demonstrate intents in building the AI model
+
+
+Here's an R lab designed to demonstrate intents in building an AI model, suitable for students. It builds a simple chatbot intent classifier with visualizations and interactive elements.
+
+R
+
+Collapse
+
+Wrap
+
+Copy
+# R Lab: Building an AI Model to Classify Chatbot Intents
+
+# Step 1: Setup Environment
+required_packages <- c("tm", "nnet", "caret")
+for (pkg in required_packages) {
+  if (!require(pkg, character.only = TRUE, quietly = TRUE)) {
+    install.packages(pkg)
+    library(pkg, character.only = TRUE)
+  }
+}
+
+# Step 2: Create Sample Chatbot Data with Intents
+chat_data <- data.frame(
+  text = c("Hi there", "Hello friend", "Good bye", "See you later",
+           "Thank you", "Thanks a lot", "Help me", "Need assistance"),
+  intent = factor(c("Greet", "Greet", "Farewell", "Farewell",
+                   "Gratitude", "Gratitude", "Help", "Help"))
+)
+
+# Step 3: Visualize the Data Distribution
+barplot(table(chat_data$intent),
+        col = rainbow(4),
+        main = "Distribution of Intents",
+        ylab = "Number of Examples",
+        ylim = c(0, 5))
+
+# Step 4: Preprocess Text into Features
+corpus <- VCorpus(VectorSource(chat_data$text))
+dtm <- DocumentTermMatrix(corpus, 
+                         control = list(
+                           weighting = weightTf,
+                           tolower = TRUE,
+                           removePunctuation = TRUE
+                         ))
+feature_matrix <- as.matrix(dtm)
+train_data <- as.data.frame(feature_matrix)
+train_data$intent <- chat_data$intent
+
+# Step 5: Train the Model
+set.seed(42)
+model <- multinom(intent ~ ., 
+                 data = train_data,
+                 maxit = 200,
+                 trace = FALSE)
+
+# Step 6: Make Predictions and Visualize Results
+predictions <- predict(model, train_data)
+accuracy <- mean(predictions == chat_data$intent)
+cat(sprintf("Model Accuracy: %.2f%%\n", accuracy * 100))
+
+# Create confusion matrix plot
+conf_matrix <- table(Predicted = predictions, Actual = chat_data$intent)
+heatmap(conf_matrix,
+        Rowv = NA,
+        Colv = NA,
+        col = heat.colors(256),
+        main = "Confusion Matrix of Intent Predictions",
+        margins = c(8, 8))
+
+# Step 7: Interactive Prediction Function
+predict_intent <- function(new_text) {
+  new_corpus <- VCorpus(VectorSource(new_text))
+  new_dtm <- DocumentTermMatrix(new_corpus,
+                               control = list(
+                                 weighting = weightTf,
+                                 tolower = TRUE,
+                                 removePunctuation = TRUE
+                               ))
+  new_matrix <- as.matrix(new_dtm)
+  # Align features
+  missing_cols <- setdiff(colnames(train_data)[!colnames(train_data) %in% "intent"],
+                         colnames(new_matrix))
+  if(length(missing_cols) > 0) {
+    extra <- matrix(0, nrow = nrow(new_matrix), ncol = length(missing_cols))
+    colnames(extra) <- missing_cols
+    new_matrix <- cbind(new_matrix, extra)
+  }
+  new_data <- as.data.frame(new_matrix)[, colnames(train_data)[!colnames(train_data) %in% "intent"]]
+  predict(model, new_data)
+}
+
+# Step 8: Test the Model Interactively
+test_phrases <- c("Hello everyone", "Thanks so much", "I need help please", "Bye bye")
+for (phrase in test_phrases) {
+  predicted_intent <- predict_intent(phrase)
+  cat(sprintf("Phrase: '%s' -> Predicted Intent: %s\n", phrase, predicted_intent))
+}
+
+# Step 9: Bonus Visualization - Word Cloud
+wordcloud::wordcloud(colnames(feature_matrix), 
+                    colSums(feature_matrix),
+                    colors = brewer.pal(8, "Dark2"),
+                    main = "Word Cloud of Features")
+
+                    Lab Explanation for Students
+This lab demonstrates how to build an AI model to classify chatbot intents:
+
+Setup: Installs necessary packages (tm for text processing, nnet for neural networks, caret for evaluation).
+Data: Creates a small dataset with four intents: Greet, Farewell, Gratitude, and Help.
+Visualization: Shows a bar plot of intent distribution to understand the data.
+Preprocessing: Converts text into numerical features using a Document-Term Matrix.
+Training: Builds a neural network model to learn intent patterns.
+Evaluation: Shows accuracy and a heatmap of the confusion matrix to visualize performance.
+Prediction: Includes an interactive function to test new phrases.
+Testing: Demonstrates predictions on sample phrases.
+Bonus: Adds a word cloud to visualize important words in the dataset.
+Running the Lab
+Copy this code into R or RStudio
+Run it step-by-step to see each visualization
+Try modifying the test phrases in Step 8
+Observe how the model predicts intents based on word patterns
+This lab provides a hands-on demonstration of AI model building with visual feedback, making it engaging and educational for students learning about intent classification.

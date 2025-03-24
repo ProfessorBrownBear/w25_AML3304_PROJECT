@@ -5,15 +5,9 @@ Start by getting this R code to run:
 R lab to demonstrate intents in building the AI model
 
 
-Here's an R lab designed to demonstrate intents in building an AI model, suitable for students. It builds a simple chatbot intent classifier with visualizations and interactive elements.
+Here's an R lab designed to demonstrate intents in building an AI model, suitable for students. It builds a simple chatbot intent classifier
+with visualizations and interactive elements.
 
-R
-
-Collapse
-
-Wrap
-
-Copy
 # R Lab: Building an AI Model to Classify Chatbot Intents
 
 # Step 1: Setup Environment
